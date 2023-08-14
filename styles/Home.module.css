@@ -2,6 +2,19 @@
   padding: 0 2rem;
 }
 
+.header {
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+  border-bottom: 1px solid #eaeaea;
+  justify-content: right;
+  align-items: right;
+}
+
+.navigate_menu_buttons {
+  padding: 0% 4%;
+}
+
 .main {
   min-height: 100vh;
   padding: 4rem 0;
@@ -93,6 +106,8 @@
   font-size: 1.2rem;
   line-height: 1.5;
 }
+
+
 
 @media (max-width: 600px) {
   .grid {
