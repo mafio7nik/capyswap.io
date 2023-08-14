@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { Button, Input, Stack } from '@chakra-ui/react';
 import styles from 'styles/Home.module.css';
 import React from 'react';
+import Link from 'next/link'
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
