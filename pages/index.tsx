@@ -17,8 +17,7 @@ const Home: NextPage = () => {
       </Head>
       <header className={styles.header}>
         <div className={styles.navigate_menu_buttons}></div>
-        <Button className={styles.navigate_menu_buttons} variant="solid"><a href='/swap'>Swap</a></Button>
-        <Button className={styles.navigate_menu_buttons} variant="solid"><a href='/airdrop'>Airdrop</a></Button> 
+        <Button className={styles.navigate_menu_buttons} variant="solid"><Link href='/airdrop'>Airdrop</Link></Button> 
         <ConnectButton/>
       </header>
       <main className={styles.main}>
