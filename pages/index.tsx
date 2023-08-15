@@ -5,6 +5,7 @@ import { Button, Input, Stack } from '@chakra-ui/react';
 import styles from 'styles/Home.module.css';
 import React from 'react';
 import Link from 'next/link'
+import Image from 'next/image'
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -17,7 +18,7 @@ const Home: NextPage = () => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
       <header className={styles.header}>
-        <div className={styles.navigate_menu_buttons}></div>
+        <Image src="https://cdn.dribbble.com/users/1573719/screenshots/17298496/media/a7b31cb4a1636f65426143e2f6e42164.png" width={200} height={200} alt="Logo" />
         <Button className={styles.navigate_menu_buttons} variant="solid"><Link href='/airdrop'>Airdrop</Link></Button> 
         <ConnectButton/>
       </header>
