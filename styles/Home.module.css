@@ -7,12 +7,19 @@
   flex: 1;
   padding: 2rem 0;
   border-bottom: 1px solid #eaeaea;
-  justify-content: right;
-  align-items: right;
+  align-items: flex-start;
+}
+
+.logoContainer {
+  margin-left: auto;
+}
+
+.connectButtonContainer {
+  margin-left: auto;
 }
 
 .navigate_menu_buttons {
-  padding: 0% 4%;
+  padding: 1%;
 }
 
 .main {

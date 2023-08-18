@@ -2,7 +2,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Button, Input, Stack } from '@chakra-ui/react';
-import styles from 'styles/Home.module.css';
+import styles from 'styles/Home.module.css'
 import React from 'react';
 import Link from 'next/link'
 import Image from 'next/image'
@@ -18,9 +18,20 @@ const Home: NextPage = () => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
       <header className={styles.header}>
-        <Image src="https://cdn.dribbble.com/users/1573719/screenshots/17298496/media/a7b31cb4a1636f65426143e2f6e42164.png" width={200} height={200} alt="Logo" />
-        <Button className={styles.navigate_menu_buttons} variant="solid"><Link href='/airdrop'>Airdrop</Link></Button> 
-        <ConnectButton/>
+        <Link href='/' passHref>
+          <div className={styles.logoContainer}>
+            <Image src="https://github.com/mafio7nik/capyswap.io/blob/main/images/logo.png?raw=true" width={50} height={50} alt="Logo" className={styles.logo} />
+          </div>
+        </Link>
+        <Button mr={0} ml={5} variant="solid">
+          <Link href='/swap'>Swap</Link>
+        </Button>
+        <Button mr={0} ml={5} variant="solid">
+          <Link href='/airdrop'>Airdrop</Link>
+        </Button>
+        <div className={styles.connectButtonContainer}>
+          <ConnectButton />
+        </div>
       </header>
       <main className={styles.main}>
         
