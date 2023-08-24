@@ -17,6 +17,7 @@ import {
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { ChakraProvider } from '@chakra-ui/react';
+import { Chakra } from '../styles/Chakra';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -35,6 +36,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()]
 );
 
+
 const { connectors } = getDefaultWallets({
   appName: 'capyswap.io',
   projectId: '4e85f817631e8472dd0c176652ccbf9a',
@@ -48,16 +50,16 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <ChakraProvider>
+      <RainbowKitProvider coolMode showRecentTransactions={true} chains={chains}>
+        <Chakra cookies={pageProps.cookies}>
           <Component {...pageProps} />
-        </ChakraProvider>
+        </Chakra>
       </RainbowKitProvider>
     </WagmiConfig>
   );
 }
 
-export default MyApp;
+export default App;

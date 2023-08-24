@@ -1,11 +1,13 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { MintNFT } from '../components/mint';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Button, Input, Stack } from '@chakra-ui/react';
-import styles from 'styles/Home.module.css'
+import styles from '../styles/Home.module.css'
 import React from 'react';
 import Link from 'next/link'
 import Image from 'next/image'
+import { Header } from '../components/header'
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -17,26 +19,10 @@ const Home: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <header className={styles.header}>
-        <Link href='/' passHref>
-          <div className={styles.logoContainer}>
-            <Image src="https://github.com/mafio7nik/capyswap.io/blob/main/images/logo.png?raw=true" width={50} height={50} alt="Logo" className={styles.logo} />
-          </div>
-        </Link>
-        <Button mr={0} ml={5} variant="solid">
-          <Link href='/swap'>Swap</Link>
-        </Button>
-        <Button mr={0} ml={5} variant="solid">
-          <Link href='/airdrop'>Airdrop</Link>
-        </Button>
-        <div className={styles.connectButtonContainer}>
-          <ConnectButton />
-        </div>
-      </header>
+      <Header />
       <main className={styles.main}>
-        
+        <MintNFT />
       </main>
-
       <footer className={styles.footer}>
         <a href="https://rainbow.me" rel="noopener noreferrer" target="_blank">
           Made with ❤️ by your frens at 🌈

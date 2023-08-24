@@ -6,7 +6,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['cdn.dribbble.com' ,'github.com'], // Add your domain here
+    domains: ['cdn.dribbble.com' ,'github.com', 'cryptologos.cc'], // Add your domain here
   },
 };
 
