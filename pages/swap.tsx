@@ -7,7 +7,7 @@ import React from 'react';
 import Link from 'next/link'
 import Image from 'next/image'
 import { Header } from '../components/header'
-import { SwapComponent } from '../components/swap'
+import  SwapPage  from '../components/SwapPage'
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       </Head>
       <Header />
       <main className={styles.main}>
-        <SwapComponent />
+        <SwapPage />
       </main>
 
       <footer className={styles.footer}>

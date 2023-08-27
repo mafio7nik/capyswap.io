@@ -8,6 +8,8 @@ import React from 'react';
 import Link from 'next/link'
 import Image from 'next/image'
 import { Header } from '../components/header'
+import SwapMenu from '../components/swap';
+import SwapComponent from '../components/SwapPage';
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -21,7 +23,7 @@ const Home: NextPage = () => {
       </Head>
       <Header />
       <main className={styles.main}>
-        <MintNFT />
+        <SwapComponent />
       </main>
       <footer className={styles.footer}>
         <a href="https://rainbow.me" rel="noopener noreferrer" target="_blank">
