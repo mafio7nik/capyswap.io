@@ -57,27 +57,30 @@ export default function SwapMenu() {
     const tokenadress2 = useGetTokenAddress(tokenlist, selectedToken2, chainid || 0);
 
     useEffect(() => {
-        fetchPrices(tokenadress1, tokenadress2);
         FetchTokens(chainid || 0);
-    }, [tokenadress1, tokenadress2, chainid]);
+    }, [chainid]);
 
     const [searchQuery, setSearchQuery] = useState('');
     const handleInputChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
+        fetchPrices(tokenadress1, tokenadress2);
         setTokenOneAmount(event.target.value);
         const tokenTwoAmount = Number(event.target.value) * Number(prices1);
         setTokenTwoAmount(tokenTwoAmount.toString());
         console.log('chage', tokenOneAmount);
         console.log('chage', tokenTwoAmount);
         console.log('chage', prices1);
+        
     };
 
     const handleInputChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+        fetchPrices(tokenadress1, tokenadress2);
         setTokenTwoAmount(event.target.value);
         const tokenTwoAmount = Number(event.target.value) * Number(prices2);
         setTokenOneAmount(tokenTwoAmount.toString());
         console.log('chage', tokenOneAmount);
         console.log('chage', tokenTwoAmount);
         console.log('chage', prices2);
+        
       };
     
     //console.log('selectedtokenaddress1', selectedtokenaddress1);
@@ -87,23 +90,19 @@ export default function SwapMenu() {
     }
 
     async function FetchTokens(chainid: number) {
-  
-        const refreshTokenList = () => {
-          // Fetch the token list from the URL
-          
-          const tokens = tokenlistjson.tokens as Token[];
-          const connectedchainId = chainid;
-          // Filter tokens based on connected network (Binance Smart Chain)
-          const filteredTokens = tokens.filter(token => token.chainId === connectedchainId);
-      
-          // Sort tokens by symbol
-          filteredTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
-      
-          setTokenList(filteredTokens);
+
+        const tokens = tokenlistjson.tokens as Token[];
+        const connectedchainId = chainid;
+        // Filter tokens based on connected network (Binance Smart Chain)
+        const filteredTokens = tokens.filter(token => token.chainId === connectedchainId);
+    
+        // Sort tokens by symbol
+        filteredTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
+        setTokenList(filteredTokens);
         
-        };
-        refreshTokenList();
-      };
+        
+        
+    };
     
     async function fetchPrices(one: any, two: any) {
         try {
