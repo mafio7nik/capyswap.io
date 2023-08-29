@@ -12,15 +12,13 @@ export type Token = {
   logoURI: string;
 };
 
-function useFetchTokens(chainid: number) {
+export default function useFetchTokens(chainid: number) {
   
   const [amountInEth, setAmountInEth] = useState('');
   const [selectedToken, setSelectedToken] = useState('');
   const [tokenList, setTokenList] = useState<Token[]>([]);
 
-  useEffect(() => {
-    refreshTokenList(); // Fetch the token list and refresh whenever the network changes
-  }, [chainid]);
+  
 
   const refreshTokenList = () => {
     // Fetch the token list from the URL
@@ -36,6 +34,10 @@ function useFetchTokens(chainid: number) {
     setTokenList(filteredTokens);
   
   };
+  
+  useEffect(() => {
+    refreshTokenList(); // Fetch the token list and refresh whenever the network changes
+  }, [chainid]);
+  
   return tokenList;
 };
-export default useFetchTokens;

@@ -20,15 +20,16 @@ import {
     Image, 
     getToken} from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import useFetchTokens from '../hooks/useFetchTokens'
+//import useFetchTokens from '../hooks/useFetchTokens'
 import { useNetwork } from "wagmi";
 import { Token } from '../hooks/useFetchTokens'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import dynamic from "next/dynamic";
 import GetTokenPrice from "../hooks/useGetTokenPrice";
 import useGetTokenAddress from "../hooks/useGetTokenadress";
 import axios from "axios";
 import waitUntil from "async-wait-until";
+import tokenlistjson from '../public/data/tokens.uniswap.json'
 // ... (other imports)
 interface TokenPrices {
     ratio: number;
@@ -39,13 +40,12 @@ export default function SwapMenu() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { chain } = useNetwork();
     const chainid = chain?.id;
-    let tokenlist: Token[] = [];
     const defaultTokenSymbol1 = 'USDT'; // Change this to your default token's symbol
     const defaultTokenSymbol2 = 'WETH'; // Change this to your default token's symbol
     const [selectedToken1, setSelectedToken1] = useState<string>(defaultTokenSymbol1);
     const [selectedToken2, setSelectedToken2] = useState<string>(defaultTokenSymbol2);
     const [selecttokenid, setSelectTokenid ] = useState(Number);
-
+    const [tokenlist, setTokenList] = useState<Token[]>([]); // Add this line
     const [tokenOneAmount, setTokenOneAmount] = useState('');
     const [tokenTwoAmount, setTokenTwoAmount] = useState('');
     const [prices1, setPrices1] = useState();
@@ -53,20 +53,13 @@ export default function SwapMenu() {
     
     const chainname = chain?.name;
 
-    if (chainid !== undefined) {
-        tokenlist = useFetchTokens(chainid);
-    }
-    
-    function delay(ms: number) {
-        return new Promise( resolve => setTimeout(resolve, ms) );
-    }
-
     const tokenadress1 = useGetTokenAddress(tokenlist, selectedToken1, chainid || 0);
     const tokenadress2 = useGetTokenAddress(tokenlist, selectedToken2, chainid || 0);
 
     useEffect(() => {
         fetchPrices(tokenadress1, tokenadress2);
-    }, [tokenadress1, tokenadress2]);
+        FetchTokens(chainid || 0);
+    }, [tokenadress1, tokenadress2, chainid]);
 
     const [searchQuery, setSearchQuery] = useState('');
     const handleInputChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,6 +81,29 @@ export default function SwapMenu() {
       };
     
     //console.log('selectedtokenaddress1', selectedtokenaddress1);
+     
+    function delay(ms: number) {
+        return new Promise( resolve => setTimeout(resolve, ms) );
+    }
+
+    async function FetchTokens(chainid: number) {
+  
+        const refreshTokenList = () => {
+          // Fetch the token list from the URL
+          
+          const tokens = tokenlistjson.tokens as Token[];
+          const connectedchainId = chainid;
+          // Filter tokens based on connected network (Binance Smart Chain)
+          const filteredTokens = tokens.filter(token => token.chainId === connectedchainId);
+      
+          // Sort tokens by symbol
+          filteredTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
+      
+          setTokenList(filteredTokens);
+        
+        };
+        
+      };
     
     async function fetchPrices(one: any, two: any) {
         try {
