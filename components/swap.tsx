@@ -102,7 +102,7 @@ export default function SwapMenu() {
           setTokenList(filteredTokens);
         
         };
-        
+        refreshTokenList();
       };
     
     async function fetchPrices(one: any, two: any) {

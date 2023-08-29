@@ -2,7 +2,7 @@ import axios from "axios";
 
 async function GetTokenPrice(tokenaddressA: string | undefined, tokenaddressB: string | undefined, chainname: string | undefined) {
   try {
-    const res = await axios.get(`https://capyswap-api-io.onrender.com`, {
+    const res = await axios.get(`https://capyswap-api-io.onrender.com/tokenPrice`, {
       params: { addressOne: tokenaddressA, addressTwo: tokenaddressB, chainname: chainname },
     });
 
