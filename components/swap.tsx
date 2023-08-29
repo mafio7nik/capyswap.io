@@ -17,7 +17,8 @@ import {
     ModalCloseButton, 
     useDisclosure,
     Select,
-    Image } from "@chakra-ui/react";
+    Image, 
+    getToken} from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import useFetchTokens from '../hooks/useFetchTokens'
 import { useNetwork } from "wagmi";
@@ -25,30 +26,79 @@ import { Token } from '../hooks/useFetchTokens'
 import React, { useState, useEffect } from 'react';
 import dynamic from "next/dynamic";
 import GetTokenPrice from "../hooks/useGetTokenPrice";
-
+import useGetTokenAddress from "../hooks/useGetTokenadress";
+import axios from "axios";
+import waitUntil from "async-wait-until";
 // ... (other imports)
+interface TokenPrices {
+    ratio: number;
+    // Add other properties if needed
+}
 
 export default function SwapMenu() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { chain } = useNetwork();
     const chainid = chain?.id;
-
     let tokenlist: Token[] = [];
-
-    if (chainid !== undefined) {
-        tokenlist = useFetchTokens(chainid);
-    }
-    
-    const defaultTokenSymbol1 = '1INCH'; // Change this to your default token's symbol
+    const defaultTokenSymbol1 = 'USDT'; // Change this to your default token's symbol
     const defaultTokenSymbol2 = 'WETH'; // Change this to your default token's symbol
     const [selectedToken1, setSelectedToken1] = useState<string>(defaultTokenSymbol1);
     const [selectedToken2, setSelectedToken2] = useState<string>(defaultTokenSymbol2);
     const [selecttokenid, setSelectTokenid ] = useState(Number);
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const [tokenaddressA, setTokenaddressA] = useState<string>('');
-    const [tokenaddressB, setTokenaddressB] = useState<string>('');
+    const [tokenOneAmount, setTokenOneAmount] = useState('');
+    const [tokenTwoAmount, setTokenTwoAmount] = useState('');
+    const [prices1, setPrices1] = useState();
+    const [prices2, setPrices2] = useState();
+    
+    const chainname = chain?.name;
 
+    if (chainid !== undefined) {
+        tokenlist = useFetchTokens(chainid);
+    }
+    
+    function delay(ms: number) {
+        return new Promise( resolve => setTimeout(resolve, ms) );
+    }
+
+    const tokenadress1 = useGetTokenAddress(tokenlist, selectedToken1, chainid || 0);
+    const tokenadress2 = useGetTokenAddress(tokenlist, selectedToken2, chainid || 0);
+
+    useEffect(() => {
+        fetchPrices(tokenadress1, tokenadress2);
+    }, [tokenadress1, tokenadress2]);
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const handleInputChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTokenOneAmount(event.target.value);
+        const tokenTwoAmount = Number(event.target.value) * Number(prices1);
+        setTokenTwoAmount(tokenTwoAmount.toString());
+        console.log('chage', tokenOneAmount);
+        console.log('chage', tokenTwoAmount);
+        console.log('chage', prices1);
+    };
+
+    const handleInputChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTokenTwoAmount(event.target.value);
+        const tokenTwoAmount = Number(event.target.value) * Number(prices2);
+        setTokenOneAmount(tokenTwoAmount.toString());
+        console.log('chage', tokenOneAmount);
+        console.log('chage', tokenTwoAmount);
+        console.log('chage', prices2);
+      };
+    
+    //console.log('selectedtokenaddress1', selectedtokenaddress1);
+    
+    async function fetchPrices(one: any, two: any) {
+        try {
+            const res = await GetTokenPrice(await one, await two, await chainname);
+            setPrices1(res.ratio1);
+            setPrices2(res.ratio2);
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -58,7 +108,10 @@ export default function SwapMenu() {
         <Flex justify="center" align="center" height="100vh" mt="0">
             <Box p="4" border="1px" borderColor="gray.300" borderRadius="10">
                 {/* ... (existing code) */}
-                <Input placeholder="0" borderRadius="10"/>
+                <Input placeholder="0" borderRadius="10" onChange={handleInputChange1} value={tokenOneAmount} onClick={() =>{
+                    setTokenTwoAmount('');
+                    handleInputChange1;
+                }}/>
                 <Button onClick={() => {
                     setSelectTokenid(1);
                     onOpen();
@@ -68,7 +121,10 @@ export default function SwapMenu() {
                 </Button>
                 {/* ... (other code) */}
                 <Box>
-                    <Input placeholder="0"></Input>
+                    <Input placeholder="0" onChange={handleInputChange2} value={tokenTwoAmount}  onClick={() => {
+                        setTokenOneAmount('');
+                        handleInputChange2;
+                    }}></Input>
                     <Button onClick={() => {
                     setSelectTokenid(2);
                     onOpen();
@@ -79,9 +135,7 @@ export default function SwapMenu() {
                 </Box>
                 <Box alignItems="center">
                     <Button borderRadius="10" mt={2} onClick={() => {
-                        GetTokenPrice(tokenaddressA, tokenaddressB);
-                        console.log(GetTokenPrice);
-                }}>Swap</Button>
+                    }}>Swap</Button>
                 </Box>
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
@@ -103,11 +157,9 @@ export default function SwapMenu() {
                                         onClick={() => {
                                             if (selecttokenid === 1) {
                                                 setSelectedToken1(token.symbol);
-                                                setTokenaddressA(token.address);
                                                 onClose();
                                             } else if (selecttokenid === 2) {
                                                 setSelectedToken2(token.symbol);
-                                                setTokenaddressB(token.address);
                                                 onClose();
                                             }
                                         }}
